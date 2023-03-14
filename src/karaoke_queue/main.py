@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 
-from .endpoint_generators import get_session_admin_endpoint
+from .endpoint_base_generators import get_session_user_endpoint
+from .endpoint_base_generators import get_session_admin_endpoint
 from .data_models.session import Session
 from .data_models.types import uuid_hex_t
 from .session_manager import SessionManager
 from .version import __version__
 from .admin_endpoints import admin_panel
+from .user_endpoints import queue_actions
 
 
 description = """
@@ -31,6 +33,7 @@ app = FastAPI(
 )
 
 app.include_router(admin_panel.router)
+app.include_router(queue_actions.router)
 
 session_manager = SessionManager()
 
@@ -50,15 +53,8 @@ async def new_session(name: str):
             }
         }
 
-@app.post("/v1/queue")
-async def queue(title: str):
-    """
-    Transcribe audio file.
-    :param title: Song to queue.
 
-    :return: position
-    """
-    pass
+
 
 
 @app.get("/v1/status/{task_id}")
