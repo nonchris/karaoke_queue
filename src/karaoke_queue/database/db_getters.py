@@ -1,8 +1,8 @@
 from typing import Union, Optional, Any
 
-from data_models.song import Song
-from database.db_base import SONGS_TABLE, DB, song_entries_to_song_objects, connect_if_needed
-from log_setup import logger
+from .db_base import SONGS_TABLE, DB, song_entries_to_song_objects, connect_if_needed
+from ..data_models.song import Song
+from ..log_setup import logger
 
 
 # this function is not generified because its unique thing is that it just queries one distinct object
@@ -28,6 +28,14 @@ def __get_song_by_title_and_author(title: str, artist: str, conn=None, db=DB, ta
 
 def get_song(song: Song, conn=None, db=DB, table=SONGS_TABLE) -> Optional[Song]:
     return get_song_by_title_and_author(song.title, song.artist, conn=conn, db=db, table=table)
+
+
+def get_song_by_primary_key(song_id: int, conn=None, db=DB, table=SONGS_TABLE) -> Optional[Song]:
+    songs = get_songs_where(field="id", identifier=song_id, conn=conn, db=db, table=table)
+    if songs is None:
+        return None
+
+    return songs[0]
 
 
 def get_songs_by_field(column: str, order_desc=True, conn=None, db=DB, table=SONGS_TABLE) -> Optional[list[Song]]:
