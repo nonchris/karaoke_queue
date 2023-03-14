@@ -2,7 +2,7 @@ from fastapi import APIRouter
 
 from ..database import songs_db
 from ..session_manager import SessionManager
-from ..data_models.exceptions import raise_bad_request_session_unknown, raise_bad_request
+from ..data_models.exceptions import make_bad_request_session_unknown, make_raise_bad_request
 
 router = APIRouter(
     prefix="/v1/user"
@@ -25,7 +25,7 @@ async def queue_song(session_name: str, song_id: int, user_name: str):
     session = session_manager.get_session(session_name)
 
     if session is None:
-        raise_bad_request_session_unknown(session_name)
+        raise make_bad_request_session_unknown(session_name)
 
     song = songs_db.get_song_by_primary_key(song_id)
     session.add_to_queue(song, user_name)

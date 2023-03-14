@@ -3,7 +3,8 @@ from fastapi import APIRouter
 from ..endpoint_base_generators import get_session_admin_endpoint
 from ..session_manager import SessionManager
 from ..data_models.types import uuid_hex_t
-from ..data_models.exceptions import raise_bad_request_session_unknown, raise_bad_request
+from ..data_models.session import Session
+from ..data_models.exceptions import make_bad_request_session_unknown, make_raise_bad_request
 
 router = APIRouter(
     prefix="/v1/manage"
