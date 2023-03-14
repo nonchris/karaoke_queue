@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from .endpoint_base_generators import get_session_user_endpoint
 from .endpoint_base_generators import get_session_admin_endpoint
@@ -32,6 +33,21 @@ app = FastAPI(
     },
 )
 
+# TODO: should potentially remove that wildcard (...)
+origins = [
+    "*",
+    "http://localhost",
+    "http://localhost:8080",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(admin_panel.router)
 app.include_router(queue_actions.router)
 
@@ -54,9 +70,6 @@ async def new_session(name: str):
                 "next_song": f"{get_session_admin_endpoint(session)}/next"
             }
         }
-
-
-
 
 
 @app.get("/v1/status/{task_id}")
