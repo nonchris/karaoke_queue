@@ -4,6 +4,8 @@ let
     (p: with p; [
       fastapi
       uvicorn
+      setuptools
+      pip
     ]);
 in
 pkgs.mkShell

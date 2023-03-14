@@ -5,7 +5,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-def read_version(fname="whisper_api/version.py"):
+def read_version(fname="src/karaoke_queue/version.py"):
     exec(compile(open(fname, encoding="utf-8").read(), fname, "exec"))
     return locals()["__version__"]
 
@@ -22,7 +22,7 @@ setup(
     long_description_content_type="text/markdown",
     readme="README.md",
     python_requires=">=3.9",
-    packages=find_packages(where='src', exclude=["tests*"]),
+    packages=find_packages(exclude=["tests*"]),
     install_requires=[
         str(r)
         for r in pkg_resources.parse_requirements(
@@ -30,7 +30,7 @@ setup(
         )
     ],
     entry_points={
-        "console_scripts": ["karaoke_queue=karaoke_queue.webserver:start"],
+        "console_scripts": ["karaoke-queue=karaoke_queue.webserver:start"],
     },
     include_package_data=True,
 )
