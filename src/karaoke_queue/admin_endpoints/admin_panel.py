@@ -38,6 +38,17 @@ def admin_panel(session_name: str, uuid: uuid_hex_t):
             }}
 
 
+@router.get(f"{auth_url}/next")
+def next_song(session_name: str, uuid: uuid_hex_t):
+    session = ensure_session_and_uuid(session_name, uuid)
+
+    entry = next(session)
+
+    return {"next": entry.to_transmit,
+            "session": session.admin_to_transmit_info,
+            "links": {}}
+
+
 @router.get(f"/{auth_url}/close", status_code=501)
 def close_session(session_name: str, uuid: uuid_hex_t):
     return {}

@@ -50,7 +50,8 @@ async def new_session(name: str):
     return {"session": session.admin_to_transmit_info,
             "links": {
                 "admin_panel": get_session_admin_endpoint(session),
-                "queue_song": f"{get_session_user_endpoint(session)}/queue_song"
+                "queue_song": f"{get_session_user_endpoint(session)}/queue_song",
+                "next_song": f"{get_session_admin_endpoint(session)}/next"
             }
         }
 
