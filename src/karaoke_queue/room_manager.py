@@ -1,11 +1,12 @@
 from copy import deepcopy
 from typing import Callable, Optional
 
+from karaoke_queue.data_models.exceptions import make_raise_bad_request
 from karaoke_queue.data_models.player import Player
 from .log_setup import logger
 from .data_models.read_write_lock import ReadWriteLock, with_write_lock, with_read_lock
 from .data_models.room import Room
-from .data_models.types import room_name_t, player_uuid_hex_t
+from .data_models.types import room_name_t, player_uuid_hex_t, player_name_t
 
 
 def with_lock(fn: Callable):
@@ -37,6 +38,7 @@ class RoomManager(metaclass=Singleton):
 
     def __init__(self):
         self.__rooms: dict[room_name_t, Room] = {}
+        # maybe add a set of usernames to get a check for duplicates faster than iterating over all users?
         self.__players: dict[room_name_t, dict[player_uuid_hex_t, Player]] = {}
         self.lock = ReadWriteLock()
 
@@ -66,8 +68,24 @@ class RoomManager(metaclass=Singleton):
         return player
 
     @with_read_lock
+    def get_player(self, room: str, player_id: player_uuid_hex_t) -> Optional[Player]:
+        return self.__players[room].get(player_id, None)
+
+    @with_read_lock
+    def get_player_by_name(self, room: str, player_name: player_name_t) -> Optional[Player]:
+        players = self.__get_players(room)
+        for player in players:
+            if player.name == player_name:
+                return player
+
+        return None
+
+    @with_read_lock
     def get_players(self, room: str) -> list[Player]:
-        return [*deepcopy(self.__players[room].values())]
+        return deepcopy(self.__get_players(room))
+
+    def __get_players(self, room: str) -> list[Player]:
+        return [*self.__players[room].values()]
 
     @with_read_lock
     def get_players_to_transmit(self, room: str) -> list[dict]:
