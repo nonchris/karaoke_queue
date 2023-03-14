@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import Callable
 
+from .log_setup import logger
 from .data_models.read_write_lock import ReadWriteLock, with_write_lock, with_read_lock
 from .data_models.session import Session
 from .data_models.types import session_name_t
@@ -19,7 +20,18 @@ def with_lock(fn: Callable):
     return threaded_wrapper
 
 
-class SessionManager:
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        else:
+            logger.debug(f"The object '{cls.__name__}' was already initialized, returning inited object")
+        return cls._instances[cls]
+
+
+class SessionManager(metaclass=Singleton):
     """ Threadsafe session manager """
 
     def __init__(self):
