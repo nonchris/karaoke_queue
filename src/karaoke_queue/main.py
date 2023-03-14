@@ -67,9 +67,9 @@ async def new_room(name: str):
             "links": {
                 "admin_panel": get_room_admin_endpoint(room),
                 "queue_song": f"{get_room_user_endpoint(room)}/queue_song",
-                "next_song": f"{get_room_admin_endpoint(room)}/next"
+                "next_song": f"{get_room_admin_endpoint(room)}/next",
+                    }
             }
-        }
 
 
 @app.get("/v1/status/{task_id}")
@@ -79,7 +79,6 @@ async def status(task_id: str):
     :return: Status of the queue.
     """
     return {"active": True}
-
 
 # @app.on_event("startup")
 # async def schedule_periodic():

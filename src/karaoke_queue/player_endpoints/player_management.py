@@ -1,5 +1,7 @@
 from fastapi import APIRouter
+from fastapi.responses import JSONResponse
 
+from karaoke_queue.endpoint_base_generators import get_room_user_endpoint
 from karaoke_queue.room_manager import RoomManager
 from guard_clauses.guard_existences import try_get_room
 
