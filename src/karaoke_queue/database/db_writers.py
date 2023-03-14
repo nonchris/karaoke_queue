@@ -1,9 +1,9 @@
-from database.db_base import SONGS_TABLE_COLUMN_ORDER_AS_STR, DB, get_values_in_order, \
+from .db_base import SONGS_TABLE_COLUMN_ORDER_AS_STR, DB, get_values_in_order, \
     SONGS_TABLE_COLUMN_ORDER
-from data_models.song import Song
-from database.db_base import SONGS_TABLE, connect_if_needed
-from database.db_getters import get_song
-from log_setup import logger
+from .db_base import SONGS_TABLE, connect_if_needed
+from .db_getters import get_song
+from ..data_models.song import Song
+from ..log_setup import logger
 
 
 def add_song(song: Song, order=SONGS_TABLE_COLUMN_ORDER_AS_STR, conn=None, db=DB, table=SONGS_TABLE):
