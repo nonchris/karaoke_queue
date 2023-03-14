@@ -5,7 +5,7 @@ from sqlite3 import Connection
 from time import sleep
 from typing import Optional
 
-from data_models.song import Song
+from ..data_models.song import Song
 from ..log_setup import logger
 
 DB = os.getenv("DB_FILE", "data/karaoke_queue.sqlite")
@@ -67,7 +67,7 @@ def get_connection(db=DB, max_tries=3) -> Optional[Connection]:
             conn = sqlite3.connect(db)
             break
 
-        except sqlite3.OperationalError:
+        except sqlite3.OperationalError as e:
             logger.error(f"Can't open '{db}' (try {i}/{max_tries}), maybe due to a sub-folder not existing")
             sleep(0.5)  # wait a moment
 
@@ -93,7 +93,7 @@ def connect_if_needed(fn):
 
     def conn_ensured_fn(*args, **kwargs):
         if kwargs.get('conn', None) is None:
-            conn = get_connection(kwargs.get("db", kw_only_defaults["db"]))
+            conn = get_connection(kwargs.get("db", kwargs.get("db") or kw_only_defaults["db"]))
             kwargs['conn'] = conn
             res = fn(*args, **kwargs)
             conn.close()
