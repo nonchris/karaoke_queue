@@ -61,7 +61,14 @@ class RoomManager(metaclass=Singleton):
         return room
 
     @with_write_lock
-    def add_player(self, room: str, player_name: str) -> Player:
+    def add_player(self, room: str, player_name: player_name_t) -> Player:
+        """
+        :return: new Player instance if name is free
+        :raises: BadRequest if player name is already taken
+        """
+        if self.get_player_by_name(room, player_name) is not None:
+            raise make_raise_bad_request(f"Username '{player_name}' is already taken.")
+
         player = Player(player_name)
         self.__players[room][player.uuid] = player
 
