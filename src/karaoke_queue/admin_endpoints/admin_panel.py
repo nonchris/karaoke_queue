@@ -1,8 +1,9 @@
 from fastapi import APIRouter
 
-from ..endpoint_generators import get_session_admin_endpoint
+from ..endpoint_base_generators import get_session_admin_endpoint
 from ..session_manager import SessionManager
 from ..data_models.types import uuid_hex_t
+from ..data_models.exceptions import raise_bad_request_session_unknown, raise_bad_request
 
 router = APIRouter(
     prefix="/v1/manage"
@@ -14,11 +15,10 @@ session_manager = SessionManager()
 def admin_panel(session_name: str, uuid: uuid_hex_t):
     session = session_manager.get_session(session_name)
     if session is None:
-        return {}
+        raise_bad_request_session_unknown(session_name)
 
     if session.uuid != uuid:
-        return {"session": session.user_to_transmit_info,
-                "links": {}}
+        return raise_bad_request(f"Invalid admin token")
 
     return {"session": session.admin_to_transmit_info,
             "links": {
