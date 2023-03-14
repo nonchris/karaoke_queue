@@ -13,13 +13,23 @@ session_manager = SessionManager()
 
 
 @router.get("/{session_name}/{uuid}/")
-def admin_panel(session_name: str, uuid: uuid_hex_t):
+
+def ensure_session_and_uuid(session_name: str, uuid: uuid_hex_t) -> Session:
+    """ A function that shall fail if something is wrong """
     session = session_manager.get_session(session_name)
     if session is None:
-        raise_bad_request_session_unknown(session_name)
+        raise make_bad_request_session_unknown(session_name)
 
     if session.uuid != uuid:
-        return raise_bad_request(f"Invalid admin token")
+        raise make_raise_bad_request(f"Invalid admin token")
+
+    return session
+
+
+@router.get(f"{auth_url}")
+def admin_panel(session_name: str, uuid: uuid_hex_t):
+
+    session = ensure_session_and_uuid(session_name, uuid)
 
     return {"session": session.admin_to_transmit_info,
             "links": {
