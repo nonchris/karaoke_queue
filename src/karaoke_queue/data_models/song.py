@@ -12,12 +12,14 @@ datetime_str_format = "%Y-%m-%d %H:%M:%S.%f"
 class Song:
     title: str
     artist: str
-    duration: float = None
+    duration: float = None,
+    song_id: int = None,
     _last_time_played: Union[dt.datetime, datetime_string_t] = None
     prev_times_played: list[dt.datetime] = None
 
-    def __query_self(self):
-        return songs_db.get_song(self)
+    # TODO: this does circular dependency
+    # def __query_self(self):
+    #     return songs_db.get_song(self)
 
     def __post_init__(self):
         # if we get new context over last play time, we write it into object
