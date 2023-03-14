@@ -1,10 +1,11 @@
 from copy import deepcopy
 from typing import Callable, Optional
 
+from karaoke_queue.data_models.player import Player
 from .log_setup import logger
 from .data_models.read_write_lock import ReadWriteLock, with_write_lock, with_read_lock
 from .data_models.room import Room
-from .data_models.types import room_name_t
+from .data_models.types import room_name_t, player_uuid_hex_t
 
 
 def with_lock(fn: Callable):
@@ -36,6 +37,7 @@ class RoomManager(metaclass=Singleton):
 
     def __init__(self):
         self.__rooms: dict[room_name_t, Room] = {}
+        self.__players: dict[room_name_t, dict[player_uuid_hex_t, Player]] = {}
         self.lock = ReadWriteLock()
 
     @with_write_lock
@@ -53,7 +55,29 @@ class RoomManager(metaclass=Singleton):
 
         room = Room(key)
         self.__rooms[key] = room
+        self.__players[key] = {}
         return room
+
+    @with_write_lock
+    def add_player(self, room: str, player_name: str) -> Player:
+        player = Player(player_name)
+        self.__players[room][player.uuid] = player
+
+        return player
+
+    @with_read_lock
+    def get_players(self, room: str) -> list[Player]:
+        return [*deepcopy(self.__players[room].values())]
+
+    @with_read_lock
+    def get_players_to_transmit(self, room: str) -> list[dict]:
+        return [player.to_transmit for player in self.__players[room].values()]
+
+    @with_write_lock
+    def remove_player(self, room: str, player_uuid: player_uuid_hex_t):
+        players = self.__players[room]
+        if player_uuid in players:
+            del players[player_uuid]
 
     @with_read_lock
     def get_room(self, key: room_name_t) -> Optional[Room]:
