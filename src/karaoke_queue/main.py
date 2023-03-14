@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 
+from .endpoint_generators import get_session_admin_endpoint
 from .data_models.session import Session
 from .data_models.types import uuid_hex_t
 from .session_manager import SessionManager
 from .version import __version__
+from .admin_endpoints import admin_panel
 
 
 description = """
@@ -28,11 +30,9 @@ app = FastAPI(
     },
 )
 
+app.include_router(admin_panel.router)
+
 session_manager = SessionManager()
-
-
-def get_session_admin_endpoint(session: Session, base="/v1/manage/{}/{}"):
-    return base.format(session.name, session.uuid)
 
 
 @app.get("/v1/new_session")
@@ -49,34 +49,6 @@ async def new_session(name: str):
                 "admin_panel": get_session_admin_endpoint(session)
             }
         }
-
-
-@app.get("/v1/manage/{session_name}/{uuid}")
-def admin_panel(session_name: str, uuid: uuid_hex_t):
-    session = session_manager.get_session(session_name)
-    if session is None:
-        return {}
-
-    if session.uuid != uuid:
-        return {"session": session.user_to_transmit_info,
-                "links": {}}
-
-    return {"session": session.admin_to_transmit_info,
-            "links": {
-                "close": f"{get_session_admin_endpoint(session)}/close",
-                "edit_queue": f"{get_session_admin_endpoint(session)}/edit_queue"
-            }}
-
-
-@app.get("/v1/manage/{session_name}/{uuid}/close", status_code=501)
-def close_session(session_name: str, uuid: uuid_hex_t):
-    return {}
-
-
-@app.get("/v1/manage/{session_name}/{uuid}/edit_queue", status_code=501)
-def edit_queue(session_name: str, uuid: uuid_hex_t):
-    return {}
-
 
 @app.post("/v1/queue")
 async def queue(title: str):
