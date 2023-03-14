@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 
 from guard_clauses.guard_existences import try_get_room, try_get_song, try_get_player_by_uuid
 from guard_clauses.guard_convertes import try_convert_param_to_int
@@ -10,6 +10,17 @@ router = APIRouter(
 )
 
 session_manager = RoomManager()
+
+
+@router.get("/{room_name}/queue_menu")
+def queue_menu(room_name: str):
+    # TODO this shall emit a menu page one day
+    room = try_get_room(room_name)
+    return {"room": room.user_to_transmit_info,
+            "links": {
+                "queue_song": f"{get_room_user_endpoint(room)}/queue_song",
+            }
+            }
 
 
 @router.get("/{room_name}/queue_song")
