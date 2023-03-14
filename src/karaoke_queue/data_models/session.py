@@ -57,7 +57,7 @@ class Session:
 
     @with_write_lock
     def pop_from_queue(self) -> QueueEntry:
-        entry = self.__queue.pop()
+        entry = self.__queue.popleft()
         self.__history.append(entry)
         return entry
 
