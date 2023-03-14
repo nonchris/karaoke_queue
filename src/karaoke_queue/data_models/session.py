@@ -20,18 +20,25 @@ class Session:
         self.__history: deque[QueueEntry] = deque([], maxlen=self.max_history_len)
         self.lock = ReadWriteLock()
 
+    def __dequeue_to_transmit(self, dq: deque):
+        return [entry.to_transmit for entry in dq]
+
+    @property
     @with_read_lock
-    def __queue_in_transmittable_format(self):
-        return [entry.to_transmit for entry in self.__queue]
+    def __queue_in_transmittable_format(self) -> list[dict]:
+        return self.__dequeue_to_transmit(self.__queue)
+
+    @property
+    @with_read_lock
+    def __history_in_transmittable_format(self) -> list[dict]:
+        return self.__dequeue_to_transmit(self.__history)
 
     @property
     @with_read_lock
     def admin_to_transmit_info(self) -> dict:
-        to_transmit = {
-            "name": self.name,
-            "uuid": self.uuid,
-            "queue": self.__queue_in_transmittable_format()
-        }
+        # get user as base and extend context
+        to_transmit = self.user_to_transmit_info
+        to_transmit["uuid"] = self.uuid
         return to_transmit
 
     @property
@@ -39,7 +46,8 @@ class Session:
     def user_to_transmit_info(self) -> dict:
         to_transmit = {
             "name": self.name,
-            "queue": self.__queue_in_transmittable_format()
+            "queue": self.__queue_in_transmittable_format,
+            "history": self.__history_in_transmittable_format
             }
         return to_transmit
 
