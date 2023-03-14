@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Callable
+from typing import Callable, Optional
 
 from .log_setup import logger
 from .data_models.read_write_lock import ReadWriteLock, with_write_lock, with_read_lock
@@ -56,7 +56,7 @@ class SessionManager(metaclass=Singleton):
         return session
 
     @with_read_lock
-    def get_session(self, key: session_name_t):
+    def get_session(self, key: session_name_t) -> Optional[Session]:
         return self.__sessions.get(key, None)
 
     @property
