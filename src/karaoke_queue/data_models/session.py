@@ -12,10 +12,12 @@ from .read_write_lock import ReadWriteLock, with_write_lock, with_read_lock
 class Session:
     name: str
     max_queue_len: int = 420
+    max_history_len: int = 690
     uuid: uuid_hex_t = uuid4().hex
 
     def __post_init__(self):
         self.__queue: deque[QueueEntry] = deque([], maxlen=self.max_queue_len)
+        self.__history: deque[QueueEntry] = deque([], maxlen=self.max_history_len)
         self.lock = ReadWriteLock()
 
     @with_read_lock
