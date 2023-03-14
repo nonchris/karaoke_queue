@@ -28,7 +28,7 @@ def ensure_session_and_uuid(session_name: str, uuid: uuid_hex_t) -> Session:
 
 @router.get(f"{auth_url}")
 def admin_panel(session_name: str, uuid: uuid_hex_t):
-
+    """ Base panel for admin actions"""
     session = ensure_session_and_uuid(session_name, uuid)
 
     return {"session": session.admin_to_transmit_info,
@@ -40,6 +40,10 @@ def admin_panel(session_name: str, uuid: uuid_hex_t):
 
 @router.get(f"{auth_url}/next")
 def next_song(session_name: str, uuid: uuid_hex_t):
+    """
+    Get first song in queue, song will be removed to queue and be put in history
+    :return: "next" as song that is the next in queue and additional context
+    """
     session = ensure_session_and_uuid(session_name, uuid)
 
     entry = next(session)
