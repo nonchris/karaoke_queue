@@ -1,15 +1,15 @@
 from fastapi import APIRouter
 
-from karaoke_queue.session_manager import SessionManager
-from karaoke_queue.user_endpoints.user_checks import verify_session_exists
+from karaoke_queue.room_manager import RoomManager
+from karaoke_queue.user_endpoints.user_checks import verify_room_exists
 
 router = APIRouter(
     prefix="/v1"
 )
 
-session_manager = SessionManager()
+room_manager = RoomManager()
 
 
-@router.get("/join/{session_id}")
-async def join_session(session_id: str, user_name):
-    session = verify_session_exists(session_id)
+@router.get("/join/{room_id}")
+async def join_room(room_id: str, user_name):
+    room = verify_room_exists(room_id)

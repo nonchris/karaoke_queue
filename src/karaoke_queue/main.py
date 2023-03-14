@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-from .endpoint_base_generators import get_session_user_endpoint
-from .endpoint_base_generators import get_session_admin_endpoint
-from .data_models.session import Session
+from .endpoint_base_generators import get_room_user_endpoint
+from .endpoint_base_generators import get_room_admin_endpoint
+from .data_models.room import Room
 from .data_models.types import uuid_hex_t
-from .session_manager import SessionManager
+from .room_manager import RoomManager
 from .version import __version__
 from .admin_endpoints import admin_panel
 from .user_endpoints import queue_actions
@@ -51,23 +52,23 @@ app.add_middleware(
 app.include_router(admin_panel.router)
 app.include_router(queue_actions.router)
 
-session_manager = SessionManager()
+room_manager = RoomManager()
 
 
-@app.get("/v1/new_session")
-async def new_session(name: str):
+@app.get("/v1/new_room")
+async def new_room(name: str):
     """
-    Open a new session
-    :param name: Name of the session
+    Open a new room
+    :param name: Name of the room
 
-    :return: Information for session
+    :return: Information for room
     """
-    session = session_manager.add_session(name)
-    return {"session": session.admin_to_transmit_info,
+    room = room_manager.add_room(name)
+    return {"room": room.admin_to_transmit_info,
             "links": {
-                "admin_panel": get_session_admin_endpoint(session),
-                "queue_song": f"{get_session_user_endpoint(session)}/queue_song",
-                "next_song": f"{get_session_admin_endpoint(session)}/next"
+                "admin_panel": get_room_admin_endpoint(room),
+                "queue_song": f"{get_room_user_endpoint(room)}/queue_song",
+                "next_song": f"{get_room_admin_endpoint(room)}/next"
             }
         }
 

@@ -9,7 +9,7 @@ from .read_write_lock import ReadWriteLock, with_write_lock, with_read_lock
 
 
 @dataclass
-class Session:
+class Room:
     name: str
     max_queue_len: int = 420
     max_history_len: int = 690

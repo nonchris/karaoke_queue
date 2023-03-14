@@ -1,24 +1,24 @@
 from fastapi import APIRouter
 
-from ..endpoint_base_generators import get_session_admin_endpoint
-from ..session_manager import SessionManager
+from ..endpoint_base_generators import get_room_admin_endpoint
+from ..room_manager import RoomManager
 from ..data_models.types import uuid_hex_t
-from ..data_models.session import Session
-from ..data_models.exceptions import make_bad_request_session_unknown, make_raise_bad_request
+from ..data_models.room import Room
+from ..data_models.exceptions import make_bad_request_room_unknown, make_raise_bad_request
 
 router = APIRouter(
     prefix="/v1/manage"
 )
-session_manager = SessionManager()
+session_manager = RoomManager()
 
 auth_url = "/{session_name}/{uuid}"
 
 
-def ensure_session_and_uuid(session_name: str, uuid: uuid_hex_t) -> Session:
+def ensure_session_and_uuid(session_name: str, uuid: uuid_hex_t) -> Room:
     """ A function that shall fail if something is wrong """
-    session = session_manager.get_session(session_name)
+    session = session_manager.get_room(session_name)
     if session is None:
-        raise make_bad_request_session_unknown(session_name)
+        raise make_bad_request_room_unknown(session_name)
 
     if session.uuid != uuid:
         raise make_raise_bad_request(f"Invalid admin token")
@@ -33,8 +33,8 @@ def admin_panel(session_name: str, uuid: uuid_hex_t):
 
     return {"session": session.admin_to_transmit_info,
             "links": {
-                "close": f"{get_session_admin_endpoint(session)}/close",
-                "edit_queue": f"{get_session_admin_endpoint(session)}/edit_queue"
+                "close": f"{get_room_admin_endpoint(session)}/close",
+                "edit_queue": f"{get_room_admin_endpoint(session)}/edit_queue"
             }}
 
 

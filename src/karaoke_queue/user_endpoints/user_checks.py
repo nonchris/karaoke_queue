@@ -1,14 +1,14 @@
-from karaoke_queue.data_models.exceptions import make_bad_request_session_unknown
-from karaoke_queue.data_models.session import Session
-from karaoke_queue.session_manager import SessionManager
+from karaoke_queue.data_models.exceptions import make_bad_request_room_unknown
+from karaoke_queue.data_models.room import Room
+from karaoke_queue.room_manager import RoomManager
 
-session_manager = SessionManager()
+room_manager = RoomManager()
 
 
-def verify_session_exists(session_name: str) -> Session:
-    session = session_manager.get_session(session_name)
+def verify_room_exists(room_name: str) -> Room:
+    room = room_manager.get_room(room_name)
 
-    if session is None:
-        raise make_bad_request_session_unknown(session_name)
+    if room is None:
+        raise make_bad_request_room_unknown(room_name)
 
-    return session
+    return room

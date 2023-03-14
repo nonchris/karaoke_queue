@@ -3,8 +3,8 @@ from typing import Callable, Optional
 
 from .log_setup import logger
 from .data_models.read_write_lock import ReadWriteLock, with_write_lock, with_read_lock
-from .data_models.session import Session
-from .data_models.types import session_name_t
+from .data_models.room import Room
+from .data_models.types import room_name_t
 
 
 def with_lock(fn: Callable):
@@ -31,47 +31,47 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class SessionManager(metaclass=Singleton):
-    """ Threadsafe session manager """
+class RoomManager(metaclass=Singleton):
+    """ Threadsafe room manager """
 
     def __init__(self):
-        self.__sessions: dict[session_name_t, Session] = {}
+        self.__rooms: dict[room_name_t, Room] = {}
         self.lock = ReadWriteLock()
 
     @with_write_lock
-    def add_session(self, key: session_name_t) -> Session:
+    def add_room(self, key: room_name_t) -> Room:
         """
-        If the sessions key already exists a number will be added like
-        "cool_session" -> "cool_session-1"
-        :return: the session with unique name and other properties
+        If the rooms key already exists a number will be added like
+        "cool_room" -> "cool_room-1"
+        :return: the room with unique name and other properties
         """
         key_base = key
         i = 1
-        while key in self.__sessions:
+        while key in self.__rooms:
             key = f"{key_base}-{i}"
             i += 1
 
-        session = Session(key)
-        self.__sessions[key] = session
-        return session
+        room = Room(key)
+        self.__rooms[key] = room
+        return room
 
     @with_read_lock
-    def get_session(self, key: session_name_t) -> Optional[Session]:
-        return self.__sessions.get(key, None)
+    def get_room(self, key: room_name_t) -> Optional[Room]:
+        return self.__rooms.get(key, None)
 
     @property
-    def sessions(self):
-        return deepcopy(self.__sessions)
+    def rooms(self):
+        return deepcopy(self.__rooms)
 
 
 if __name__ == '__main__':
-    s = SessionManager()
-    name = s.add_session("hi", 42)
+    s = RoomManager()
+    name = s.add_room("hi", 42)
     print(name)
-    name2 = s.add_session("hi", 43)
+    name2 = s.add_room("hi", 43)
 
     print(name2)
 
-    print(s.sessions)
+    print(s.rooms)
 
 

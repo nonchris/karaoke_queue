@@ -1,9 +1,8 @@
 from fastapi import APIRouter
 
-from ..session_manager import SessionManager
+from ..room_manager import RoomManager
 
 router = APIRouter(
     prefix="/v1/manage"
 )
-session_manager = SessionManager()
-
+session_manager = RoomManager()

@@ -28,7 +28,7 @@ class Song:
             if isinstance(self._last_time_played, str):
                 self._last_time_played = dt.datetime.strptime(self._last_time_played, datetime_str_format)
 
-    # # TODO: last time played doesn't make any sense in its current form when supporting multiple sessions
+    # # TODO: last time played doesn't make any sense in its current form when supporting multiple rooms
     # @property
     # def last_time_played(self) -> dt.datetime:
     #     # try to get more context from database if asked for this value

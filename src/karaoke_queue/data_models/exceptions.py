@@ -8,5 +8,5 @@ def make_raise_bad_request(detail: str):
         )
 
 
-def make_bad_request_session_unknown(name: str):
-    return make_raise_bad_request(f"Unknown session '{name}'")
+def make_bad_request_room_unknown(name: str):
+    return make_raise_bad_request(f"Unknown room '{name}'")

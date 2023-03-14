@@ -1,9 +1,9 @@
-from .data_models.session import Session
+from .data_models.room import Room
 
 
-def get_session_admin_endpoint(session: Session, base="/v1/manage/{}/{}"):
-    return base.format(session.name, session.uuid)
+def get_room_admin_endpoint(room: Room, base="/v1/manage/{}/{}"):
+    return base.format(room.name, room.uuid)
 
 
-def get_session_user_endpoint(session: Session, base="/v1/user/{}"):
-    return base.format(session.name)
+def get_room_user_endpoint(room: Room, base="/v1/user/{}"):
+    return base.format(room.name)
