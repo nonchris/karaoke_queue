@@ -50,6 +50,7 @@ app.add_middleware(
 
 app.include_router(admin_panel.router)
 app.include_router(queue_actions.router)
+app.include_router(player_management.router)
 
 room_manager = RoomManager()
 
