@@ -31,7 +31,7 @@ class Session:
             "name": self.name,
             "uuid": self.uuid,
             "queue": self.__queue_in_transmittable_format()
-            }
+        }
         return to_transmit
 
     @property
@@ -46,3 +46,12 @@ class Session:
     @with_write_lock
     def add_to_queue(self, song: Song, user: str = "Unknown"):
         self.__queue.append(QueueEntry(song, user))
+
+    @with_write_lock
+    def pop_from_queue(self) -> QueueEntry:
+        entry = self.__queue.pop()
+        self.__history.append(entry)
+        return entry
+
+    def __next__(self) -> QueueEntry:
+        return self.pop_from_queue()
