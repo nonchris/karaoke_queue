@@ -2,6 +2,7 @@ from collections import deque
 from dataclasses import dataclass
 from uuid import uuid4
 
+from .player import Player
 from .song import Song
 from .queue_entry import QueueEntry
 from .types import uuid_hex_t
@@ -52,8 +53,8 @@ class Room:
         return to_transmit
 
     @with_write_lock
-    def add_to_queue(self, song: Song, user: str = "Unknown"):
-        self.__queue.append(QueueEntry(song, user))
+    def add_to_queue(self, song: Song, player: Player):
+        self.__queue.append(QueueEntry(song, player))
 
     @with_write_lock
     def pop_from_queue(self) -> QueueEntry:
