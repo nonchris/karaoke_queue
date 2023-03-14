@@ -3,12 +3,12 @@ from dataclasses import dataclass
 from typing import Union
 from uuid import uuid4
 
-from .types import datetime_string_t, player_uuid_hex_t
+from .types import datetime_string_t, player_uuid_hex_t, player_name_t
 
 
 @dataclass
 class Player:
-    name: str
+    name: player_name_t
     uuid: player_uuid_hex_t = uuid4().hex
     joined: dt.datetime = dt.datetime.now()
 

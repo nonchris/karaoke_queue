@@ -9,8 +9,7 @@ from .data_models.types import uuid_hex_t
 from .room_manager import RoomManager
 from .version import __version__
 from .admin_endpoints import admin_panel
-from .player_endpoints import queue_actions
-
+from .player_endpoints import queue_actions, player_management
 
 description = """
 Karaoke Queue API to queue Songs.
