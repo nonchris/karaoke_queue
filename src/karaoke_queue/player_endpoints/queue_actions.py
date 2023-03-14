@@ -9,7 +9,7 @@ router = APIRouter(
     prefix="/v1/user"
 )
 
-session_manager = RoomManager()
+room_manager = RoomManager()
 
 
 @router.get("/{room_name}/queue_menu")
@@ -24,8 +24,7 @@ def queue_menu(room_name: str):
 
 
 @router.get("/{room_name}/queue_song")
-async def queue_song(room_name: str, song_id: int, user_name: str):
-    # TODO: Username
+async def queue_song(request: Request):
     """
     Ann song to queue.
     :param room_name: room to queue to
@@ -34,11 +33,21 @@ async def queue_song(room_name: str, song_id: int, user_name: str):
 
     :return: current room state
     """
-    room = verify_room_exists(room_name)
 
-    song = songs_db.get_song_by_primary_key(song_id)
-    room.add_to_queue(song, user_name)
+    room_name = request.path_params["room_name"]
+    room = try_get_room(room_name)
+
+    user_id = request.cookies.get("player_id")
+    player = try_get_player_by_uuid(room.name, user_id)
+
+    song_id_str = request.query_params.get("song_id")
+    song_id = try_convert_param_to_int(song_id_str, argument="song_id")
+    song = try_get_song(song_id)
+
+    room.add_to_queue(song, player)
     return {
         "room": room.user_to_transmit_info,
-        "links": {},
+        "links": {
+            "queue_menu": f"{get_room_user_endpoint(room)}/queue_menu",
+        },
     }
