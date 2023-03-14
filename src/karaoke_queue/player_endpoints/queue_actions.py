@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 
-from .user_checks import verify_room_exists
-from ..database import songs_db
+from guard_clauses.guard_existences import try_get_room, try_get_song, try_get_player_by_uuid
+from guard_clauses.guard_convertes import try_convert_param_to_int
+from ..endpoint_base_generators import get_room_user_endpoint
 from ..room_manager import RoomManager
-from ..data_models.exceptions import make_bad_request_room_unknown, make_raise_bad_request
 
 router = APIRouter(
     prefix="/v1/user"
