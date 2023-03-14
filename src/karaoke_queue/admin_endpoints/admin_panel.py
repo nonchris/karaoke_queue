@@ -11,8 +11,8 @@ router = APIRouter(
 )
 session_manager = SessionManager()
 
+auth_url = "/{session_name}/{uuid}"
 
-@router.get("/{session_name}/{uuid}/")
 
 def ensure_session_and_uuid(session_name: str, uuid: uuid_hex_t) -> Session:
     """ A function that shall fail if something is wrong """
@@ -38,11 +38,11 @@ def admin_panel(session_name: str, uuid: uuid_hex_t):
             }}
 
 
-@router.get("/{session_name}/{uuid}/close/", status_code=501)
+@router.get(f"/{auth_url}/close", status_code=501)
 def close_session(session_name: str, uuid: uuid_hex_t):
     return {}
 
 
-@router.get("/{session_name}/{uuid}/edit_queue/", status_code=501)
+@router.get(f"/{auth_url}/edit_queue/", status_code=501)
 def edit_queue(session_name: str, uuid: uuid_hex_t):
     return {}
