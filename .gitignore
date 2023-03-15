@@ -1,6 +1,8 @@
 # project
 data/
 
+# mac
+.DS_Store
 # nix specific
 result
 
