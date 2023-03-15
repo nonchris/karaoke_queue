@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 
-from guard_clauses.guard_existences import try_get_room, try_get_song, try_get_player_by_uuid
-from guard_clauses.guard_convertes import try_convert_param_to_int
+from karaoke_queue.guard_clauses.guard_existences import try_get_room, try_get_song, try_get_player_by_uuid
+from karaoke_queue.guard_clauses.guard_convertes import try_convert_param_to_int
 from ..endpoint_base_generators import get_room_user_endpoint
 from ..room_manager import RoomManager
 
