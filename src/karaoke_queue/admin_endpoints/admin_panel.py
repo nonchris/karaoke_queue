@@ -9,14 +9,14 @@ from ..data_models.exceptions import make_bad_request_room_unknown, make_raise_b
 router = APIRouter(
     prefix="/v1/manage"
 )
-session_manager = RoomManager()
+room_manager = RoomManager()
 
 auth_url = "/{session_name}/{uuid}"
 
 
 def ensure_session_and_uuid(session_name: str, uuid: uuid_hex_t) -> Room:
     """ A function that shall fail if something is wrong """
-    session = session_manager.get_room(session_name)
+    session = room_manager.get_room(session_name)
     if session is None:
         raise make_bad_request_room_unknown(session_name)
 
