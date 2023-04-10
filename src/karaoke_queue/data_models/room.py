@@ -1,11 +1,12 @@
 from collections import deque
 from dataclasses import dataclass
+from typing import Optional
 from uuid import uuid4
 
 from .player import Player
 from .song import Song
 from .queue_entry import QueueEntry
-from .types import uuid_hex_t
+from .types import uuid_hex_t, player_uuid_hex_t
 from .read_write_lock import ReadWriteLock, with_write_lock, with_read_lock
 
 
@@ -14,12 +15,13 @@ class Room:
     name: str
     max_queue_len: int = 420
     max_history_len: int = 690
-    uuid: uuid_hex_t = uuid4().hex
+    uuid: uuid_hex_t = None
 
     def __post_init__(self):
         self.__queue: deque[QueueEntry] = deque([], maxlen=self.max_queue_len)
         self.__history: deque[QueueEntry] = deque([], maxlen=self.max_history_len)
         self.lock = ReadWriteLock()
+        self.uuid = uuid4().hex if self.uuid is None else self.uuid
 
     def __dequeue_to_transmit(self, dq: deque):
         return [entry.to_transmit for entry in dq]
