@@ -4,7 +4,7 @@ from ..endpoint_base_generators import get_room_admin_endpoint
 from ..room_manager import RoomManager
 from ..data_models.types import uuid_hex_t
 from ..data_models.room import Room
-from ..data_models.exceptions import make_bad_request_room_unknown, make_raise_bad_request
+from ..data_models.exceptions import make_bad_request_room_unknown, make_raise_bad_request, make_internal_server_error
 
 router = APIRouter(
     prefix="/v1/manage"
@@ -47,6 +47,8 @@ def next_song(session_name: str, uuid: uuid_hex_t):
     session = ensure_session_and_uuid(session_name, uuid)
 
     entry = next(session)
+    if entry is None:
+        raise make_internal_server_error("No songs in queue")
 
     return {"next": entry.to_transmit,
             "session": session.admin_to_transmit_info,
