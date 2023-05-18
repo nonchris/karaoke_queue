@@ -6,7 +6,7 @@ from ..endpoint_base_generators import get_room_user_endpoint
 from ..room_manager import RoomManager
 
 router = APIRouter(
-    prefix="/v1/user"
+    prefix="/api/v1/user"
 )
 
 room_manager = RoomManager()

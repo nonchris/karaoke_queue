@@ -63,7 +63,7 @@ app.include_router(player_management.router)
 room_manager = RoomManager()
 
 
-@app.get("/v1/new_room")
+@app.get("/api/v1/new_room")
 async def new_room(name: str):
     """
     Open a new room
@@ -81,7 +81,7 @@ async def new_room(name: str):
             }
 
 
-@app.get("/v1/status/{task_id}")
+@app.get("/api/v1/status/{task_id}")
 async def status(task_id: str):
     """
     Get the status of queue.

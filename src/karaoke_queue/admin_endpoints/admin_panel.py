@@ -7,7 +7,7 @@ from ..data_models.room import Room
 from ..data_models.exceptions import make_bad_request_room_unknown, make_raise_bad_request, make_internal_server_error
 
 router = APIRouter(
-    prefix="/v1/manage"
+    prefix="/api/v1/manage"
 )
 room_manager = RoomManager()
 

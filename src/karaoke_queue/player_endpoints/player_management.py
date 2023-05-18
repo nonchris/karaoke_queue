@@ -6,7 +6,7 @@ from karaoke_queue.room_manager import RoomManager
 from karaoke_queue.guard_clauses.guard_existences import try_get_room
 
 router = APIRouter(
-    prefix="/v1"
+    prefix="/api/v1"
 )
 
 room_manager = RoomManager()
