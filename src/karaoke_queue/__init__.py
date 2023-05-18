@@ -66,7 +66,7 @@ app.include_router(player_management.router)
 room_manager = RoomManager()
 
 
-@app.get("/api/v1/new_room")
+@app.get("/api/v1/new_room/{name}")
 async def new_room(name: str):
     """
     Open a new room

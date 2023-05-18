@@ -12,7 +12,7 @@ router = APIRouter(
 room_manager = RoomManager()
 
 
-@router.get("/join/{room_id}")
+@router.get("/join/{room_id}/{player_name}", tags=["user"], summary="Join a room")
 async def join_room(room_id: str, player_name):
     """
     Allows player to join a room by a selected name (must be unique!)
@@ -31,6 +31,7 @@ async def join_room(room_id: str, player_name):
         },
     }
     response = JSONResponse(content=content)
+    # TODO better cookie than a uuid (session cookie)
     response.set_cookie(key="player_id", value=player.uuid)
 
     return response

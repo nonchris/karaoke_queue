@@ -23,13 +23,12 @@ def queue_menu(room_name: str):
             }
 
 
-@router.get("/{room_name}/queue_song")
+@router.get("/{room_name}/queue_song/{song_id}")
 async def queue_song(request: Request):
     """
-    Ann song to queue.
+    Ann song to queue. Requires a valid session cookie.
     :param room_name: room to queue to
     :param song_id: Song to queue.
-    :param user_name: Name of the user that requested the song
 
     :return: current room state
     """
@@ -40,7 +39,7 @@ async def queue_song(request: Request):
     user_id = request.cookies.get("player_id")
     player = try_get_player_by_uuid(room.name, user_id)
 
-    song_id_str = request.query_params.get("song_id")
+    song_id_str = request.path_params["song_id"]
     song_id = try_convert_param_to_int(song_id_str, argument="song_id")
     song = try_get_song(song_id)
 
