@@ -10,6 +10,7 @@ if __package__ is None and not hasattr(sys, "frozen"):
     path = os.path.realpath(os.path.abspath(__file__))
     sys.path.insert(0, os.path.dirname(os.path.dirname(path)))
 
+import karaoke_queue.database.songs_db as song_db
 from karaoke_queue.endpoint_base_generators import get_room_user_endpoint
 from karaoke_queue.endpoint_base_generators import get_room_admin_endpoint
 from karaoke_queue.data_models.room import Room
@@ -29,6 +30,8 @@ You will be able to:
 * **Create** a new entry in the queue.
 * **Read** the status of the queue
 """
+
+song_db.setup_db()
 
 app = FastAPI(
     title="Karaoke Queue API",
