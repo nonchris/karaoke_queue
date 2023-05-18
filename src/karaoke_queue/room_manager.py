@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import Callable, Optional
 
-from karaoke_queue.data_models.exceptions import make_raise_bad_request
+from karaoke_queue.data_models.exceptions import make_bad_request_exception
 from karaoke_queue.data_models.player import Player
 from .log_setup import logger
 from .data_models.read_write_lock import ReadWriteLock, with_write_lock, with_read_lock
@@ -67,7 +67,7 @@ class RoomManager(metaclass=Singleton):
         :raises: BadRequest if player name is already taken
         """
         if self.get_player_by_name(room, player_name) is not None:
-            raise make_raise_bad_request(f"Username '{player_name}' is already taken.")
+            raise make_bad_request_exception(f"Username '{player_name}' is already taken.")
 
         player = Player(player_name)
         self.__players[room][player.uuid] = player

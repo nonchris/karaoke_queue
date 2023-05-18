@@ -1,4 +1,4 @@
-from karaoke_queue.data_models.exceptions import make_raise_bad_request
+from karaoke_queue.data_models.exceptions import make_bad_request_exception
 
 
 def try_convert_param_to_int(param: str, argument="") -> int:
@@ -10,4 +10,4 @@ def try_convert_param_to_int(param: str, argument="") -> int:
         if argument:
             msg += f" for argument '{argument}'"
 
-        raise make_raise_bad_request(msg)
+        raise make_bad_request_exception(msg)
