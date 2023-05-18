@@ -2,14 +2,22 @@ import sys
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .endpoint_base_generators import get_room_user_endpoint
-from .endpoint_base_generators import get_room_admin_endpoint
-from .data_models.room import Room
-from .data_models.types import uuid_hex_t
-from .room_manager import RoomManager
-from .version import __version__
-from .admin_endpoints import admin_panel
-from .player_endpoints import queue_actions, player_management
+from fastapi.responses import JSONResponse
+
+if __package__ is None and not hasattr(sys, "frozen"):
+    import os.path
+
+    path = os.path.realpath(os.path.abspath(__file__))
+    sys.path.insert(0, os.path.dirname(os.path.dirname(path)))
+
+from karaoke_queue.endpoint_base_generators import get_room_user_endpoint
+from karaoke_queue.endpoint_base_generators import get_room_admin_endpoint
+from karaoke_queue.data_models.room import Room
+from karaoke_queue.data_models.types import uuid_hex_t
+from karaoke_queue.room_manager import RoomManager
+from karaoke_queue.version import __version__
+from karaoke_queue.admin_endpoints import admin_panel
+from karaoke_queue.player_endpoints import queue_actions, player_management
 
 description = """
 Karaoke Queue API to queue Songs.
