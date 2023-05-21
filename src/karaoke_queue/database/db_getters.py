@@ -82,6 +82,7 @@ def get_all_songs(fields: tuple[str] = ("*",), order_by="title", order_desc=True
     return __get_all_songs(fields=fields, order_by=order_by, distinct=distinct, order_desc=order_desc, conn=conn, db=db, table=table)
 
 
+@connect_if_needed
 def __get_all_songs(fields: tuple[str] = ("*",), order_by="title", order_desc=True, distinct=False, conn=None, db=DB, table=SONGS_TABLE) -> Optional[Union[list[tuple], list[Song]]]:
     fields = ", ".join(fields)
     statement = f"SELECT {'DISTINCT' if distinct else ''} {fields} FROM {table} ORDER BY {order_by} { 'DESC' if order_desc else 'ASC'};"
