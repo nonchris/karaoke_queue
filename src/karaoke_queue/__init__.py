@@ -31,8 +31,6 @@ You will be able to:
 * **Read** the status of the queue
 """
 
-song_db.setup_db()
-
 app = FastAPI(
     title="Karaoke Queue API",
     description=description,
