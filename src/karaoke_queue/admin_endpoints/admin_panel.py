@@ -4,7 +4,7 @@ from ..endpoint_base_generators import get_room_admin_endpoint
 from ..room_manager import RoomManager
 from ..data_models.types import uuid_hex_t
 from ..data_models.room import Room
-from ..data_models.exceptions import make_bad_request_room_unknown, make_raise_bad_request, make_internal_server_error
+from ..data_models.exceptions import make_bad_request_room_unknown, make_bad_request_exception, make_internal_server_error
 
 router = APIRouter(
     prefix="/api/v1/manage"
@@ -21,7 +21,7 @@ def ensure_session_and_uuid(session_name: str, uuid: uuid_hex_t) -> Room:
         raise make_bad_request_room_unknown(session_name)
 
     if session.uuid != uuid:
-        raise make_raise_bad_request(f"Invalid admin token")
+        raise make_bad_request_exception(f"Invalid admin token")
 
     return session
 
