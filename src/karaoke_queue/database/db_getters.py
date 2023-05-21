@@ -77,7 +77,7 @@ def __get_songs_where(field: str, identifier: Union[Song, Any], comparator="=", 
     return song_entries_to_song_objects(res)
 
 
-def get_all_songs(fields: tuple[str] = ("*",), order_by="title", order_desc=True, distinct=False, conn=None, db=DB, table=SONGS_TABLE) -> Optional[Union[list[tuple], list[Song]]]:
+def get_all_songs(fields: tuple[str, ...] = ("*",), order_by="title", order_desc=True, distinct=False, conn=None, db=DB, table=SONGS_TABLE) -> Optional[Union[list[tuple], list[Song]]]:
     """ :returns: A list of songs if queried for all fields (*), else a list of tuples representing each row """
     return __get_all_songs(fields=fields, order_by=order_by, distinct=distinct, order_desc=order_desc, conn=conn, db=db, table=table)
 
